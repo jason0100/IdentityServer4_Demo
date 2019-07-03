@@ -34,8 +34,15 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Secure">Secure</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="CallApi">CallAPI</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="CallTest">CallTest</a>
+                        </li>
+
                         @if (User.Identity.IsAuthenticated) {
-                            <li class="nav-item"><a asp-area="" asp-controller="Home" asp-action="Logout">Logout</a></li>
+                            <li class="nav-item ml-auto"><a class="nav-link " asp-area="" asp-controller="Home" asp-action="Logout">Logout</a></li>
                         }
                     </ul>
                 </div>

@@ -40,3 +40,17 @@ D:\Dropbox\My Document\TaiPay\[Project dotNet Core]\[IdentityServer4]\IdentitySe
 D:\Dropbox\My Document\TaiPay\[Project dotNet Core]\[IdentityServer4]\IdentityServer4 Test1\Api\obj\Debug\netcoreapp2.2\Api.RazorTargetAssemblyInfo.cache
 D:\Dropbox\My Document\TaiPay\[Project dotNet Core]\[IdentityServer4]\IdentityServer4 Test1\Api\obj\Debug\netcoreapp2.2\Api.dll
 D:\Dropbox\My Document\TaiPay\[Project dotNet Core]\[IdentityServer4]\IdentityServer4 Test1\Api\obj\Debug\netcoreapp2.2\Api.pdb
+D:\[GitHub]\IdentityServer4\Api\bin\Debug\netcoreapp2.2\Api.deps.json
+D:\[GitHub]\IdentityServer4\Api\bin\Debug\netcoreapp2.2\Api.runtimeconfig.json
+D:\[GitHub]\IdentityServer4\Api\bin\Debug\netcoreapp2.2\Api.runtimeconfig.dev.json
+D:\[GitHub]\IdentityServer4\Api\bin\Debug\netcoreapp2.2\Api.dll
+D:\[GitHub]\IdentityServer4\Api\bin\Debug\netcoreapp2.2\Api.pdb
+D:\[GitHub]\IdentityServer4\Api\obj\Debug\netcoreapp2.2\Api.csprojAssemblyReference.cache
+D:\[GitHub]\IdentityServer4\Api\obj\Debug\netcoreapp2.2\Api.csproj.CoreCompileInputs.cache
+D:\[GitHub]\IdentityServer4\Api\obj\Debug\netcoreapp2.2\Api.RazorAssemblyInfo.cache
+D:\[GitHub]\IdentityServer4\Api\obj\Debug\netcoreapp2.2\Api.RazorAssemblyInfo.cs
+D:\[GitHub]\IdentityServer4\Api\obj\Debug\netcoreapp2.2\Api.AssemblyInfoInputs.cache
+D:\[GitHub]\IdentityServer4\Api\obj\Debug\netcoreapp2.2\Api.AssemblyInfo.cs
+D:\[GitHub]\IdentityServer4\Api\obj\Debug\netcoreapp2.2\Api.RazorTargetAssemblyInfo.cache
+D:\[GitHub]\IdentityServer4\Api\obj\Debug\netcoreapp2.2\Api.dll
+D:\[GitHub]\IdentityServer4\Api\obj\Debug\netcoreapp2.2\Api.pdb

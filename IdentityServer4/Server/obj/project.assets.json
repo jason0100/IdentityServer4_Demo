@@ -13638,11 +13638,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\Dropbox\\My Document\\TaiPay\\[Project dotNet Core]\\[IdentityServer4]\\IdentityServer4\\Server\\Server.csproj",
+      "projectUniqueName": "D:\\[GitHub]\\IdentityServer4\\Server\\Server.csproj",
       "projectName": "Server",
-      "projectPath": "D:\\Dropbox\\My Document\\TaiPay\\[Project dotNet Core]\\[IdentityServer4]\\IdentityServer4\\Server\\Server.csproj",
+      "projectPath": "D:\\[GitHub]\\IdentityServer4\\Server\\Server.csproj",
       "packagesPath": "C:\\Users\\jason\\.nuget\\packages\\",
-      "outputPath": "D:\\Dropbox\\My Document\\TaiPay\\[Project dotNet Core]\\[IdentityServer4]\\IdentityServer4\\Server\\obj\\",
+      "outputPath": "D:\\[GitHub]\\IdentityServer4\\Server\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"

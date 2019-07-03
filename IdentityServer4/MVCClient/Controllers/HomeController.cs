@@ -49,8 +49,8 @@ namespace MVCClient.Controllers {
             var accessToken = await HttpContext.GetTokenAsync("access_token");
             var client = new HttpClient();
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
-            var content = await client.GetStringAsync("http://localhost:5001/test");
-            return content;
+            ViewBag.data = await client.GetStringAsync("http://localhost:5001/test");
+            return View();
         }
 
     }

@@ -13452,11 +13452,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\Dropbox\\My Document\\TaiPay\\[Project dotNet Core]\\[IdentityServer4]\\IdentityServer4\\MVCClient\\MVCClient.csproj",
+      "projectUniqueName": "D:\\[GitHub]\\IdentityServer4\\MVCClient\\MVCClient.csproj",
       "projectName": "MVCClient",
-      "projectPath": "D:\\Dropbox\\My Document\\TaiPay\\[Project dotNet Core]\\[IdentityServer4]\\IdentityServer4\\MVCClient\\MVCClient.csproj",
+      "projectPath": "D:\\[GitHub]\\IdentityServer4\\MVCClient\\MVCClient.csproj",
       "packagesPath": "C:\\Users\\jason\\.nuget\\packages\\",
-      "outputPath": "D:\\Dropbox\\My Document\\TaiPay\\[Project dotNet Core]\\[IdentityServer4]\\IdentityServer4\\MVCClient\\obj\\",
+      "outputPath": "D:\\[GitHub]\\IdentityServer4\\MVCClient\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
