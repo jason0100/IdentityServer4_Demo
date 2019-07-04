@@ -118,20 +118,23 @@ namespace Server {
                     {
                         new Secret("secret".Sha256())
                     },
-                
+                   //RequirePkce = true,
                     // where to redirect to after login
                     RedirectUris = { "http://localhost:5002/signin-oidc" },
 
                     // where to redirect to after logout
                     PostLogoutRedirectUris = { "http://localhost:5002/signout-callback-oidc" },
-
+                    AllowedCorsOrigins =     { "http://localhost:5002" },
                     AllowedScopes = new List<string>
                     {
                         IdentityServerConstants.StandardScopes.OpenId,
                         //IdentityServerConstants.StandardScopes.Profile
                          IdentityServerConstants.StandardScopes.Profile,"api1"
                     },
-                     AllowOfflineAccess = true//this allows requesting refresh tokens for long lived API access:
+                     AllowOfflineAccess = true,//this allows requesting refresh tokens for long lived API access:
+                     FrontChannelLogoutUri="http://localhost:5002/Home/Logout",
+                     BackChannelLogoutSessionRequired=true,
+                     BackChannelLogoutUri="http://localhost:5002/Home/Logout"
                 }
             };
         }

@@ -12,7 +12,9 @@ using IdentityServer4.Test;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Server.Models;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -28,13 +30,17 @@ namespace IdentityServer4.Quickstart.UI
     [AllowAnonymous]
     public class AccountController : Controller
     {
-        private readonly TestUserStore _users;
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly SignInManager<ApplicationUser> _signInManager;
+        //private readonly TestUserStore _users;
         private readonly IIdentityServerInteractionService _interaction;
         private readonly IClientStore _clientStore;
         private readonly IAuthenticationSchemeProvider _schemeProvider;
         private readonly IEventService _events;
 
         public AccountController(
+            UserManager<ApplicationUser> userManager,
+            SignInManager<ApplicationUser> signInManager,
             IIdentityServerInteractionService interaction,
             IClientStore clientStore,
             IAuthenticationSchemeProvider schemeProvider,
@@ -43,8 +49,10 @@ namespace IdentityServer4.Quickstart.UI
         {
             // if the TestUserStore is not in DI, then we'll just use the global users collection
             // this is where you would plug in your own custom identity management library (e.g. ASP.NET Identity)
-            _users = users ?? new TestUserStore(TestUsers.Users);
+            //_users = users ?? new TestUserStore(TestUsers.Users);
 
+            _userManager = userManager;
+            _signInManager = signInManager;
             _interaction = interaction;
             _clientStore = clientStore;
             _schemeProvider = schemeProvider;
@@ -108,31 +116,13 @@ namespace IdentityServer4.Quickstart.UI
 
             if (ModelState.IsValid)
             {
-                // validate username/password against in-memory store
-                if (_users.ValidateCredentials(model.Username, model.Password))
-                {
-                    var user = _users.FindByUsername(model.Username);
-                    await _events.RaiseAsync(new UserLoginSuccessEvent(user.Username, user.SubjectId, user.Username));
+                var result = await _signInManager.PasswordSignInAsync(model.Username, model.Password, model.RememberLogin, lockoutOnFailure: true);
+                if (result.Succeeded) {
+                    var user = await _userManager.FindByNameAsync(model.Username);
+                    await _events.RaiseAsync(new UserLoginSuccessEvent(user.UserName, user.Id, user.UserName));
 
-                    // only set explicit expiration here if user chooses "remember me". 
-                    // otherwise we rely upon expiration configured in cookie middleware.
-                    AuthenticationProperties props = null;
-                    if (AccountOptions.AllowRememberLogin && model.RememberLogin)
-                    {
-                        props = new AuthenticationProperties
-                        {
-                            IsPersistent = true,
-                            ExpiresUtc = DateTimeOffset.UtcNow.Add(AccountOptions.RememberMeLoginDuration)
-                        };
-                    };
-
-                    // issue authentication cookie with subject ID and username
-                    await HttpContext.SignInAsync(user.SubjectId, user.Username, props);
-
-                    if (context != null)
-                    {
-                        if (await _clientStore.IsPkceClientAsync(context.ClientId))
-                        {
+                    if (context != null) {
+                        if (await _clientStore.IsPkceClientAsync(context.ClientId)) {
                             // if the client is PKCE then we assume it's native, so this change in how to
                             // return the response is for better UX for the end user.
                             return View("Redirect", new RedirectViewModel { RedirectUrl = model.ReturnUrl });
@@ -143,22 +133,17 @@ namespace IdentityServer4.Quickstart.UI
                     }
 
                     // request for a local page
-                    if (Url.IsLocalUrl(model.ReturnUrl))
-                    {
+                    if (Url.IsLocalUrl(model.ReturnUrl)) {
                         return Redirect(model.ReturnUrl);
-                    }
-                    else if (string.IsNullOrEmpty(model.ReturnUrl))
-                    {
+                    } else if (string.IsNullOrEmpty(model.ReturnUrl)) {
                         return Redirect("~/");
-                    }
-                    else
-                    {
+                    } else {
                         // user might have clicked on a malicious link - should be logged
                         throw new Exception("invalid return URL");
                     }
                 }
 
-                await _events.RaiseAsync(new UserLoginFailureEvent(model.Username, "invalid credentials"));
+                    await _events.RaiseAsync(new UserLoginFailureEvent(model.Username, "invalid credentials"));
                 ModelState.AddModelError(string.Empty, AccountOptions.InvalidCredentialsErrorMessage);
             }
 
@@ -187,6 +172,21 @@ namespace IdentityServer4.Quickstart.UI
             return View(vm);
         }
 
+        //To stop Identity Server automatically logging you back in again, we need to remove the cookies it has stored to identify you. Add the following Action to a controller in your Identity Server 4 project.
+        [HttpGet]
+        [Route("Logoff")]
+        public IActionResult Logoff() {
+            var myCookies = Request.Cookies.Keys;
+            foreach (string cookie in myCookies) {
+                Response.Cookies.Delete(cookie, new CookieOptions {
+                    Domain = "http://localhost"
+                });
+                //Response.Cookies.Delete(cookie);
+            }
+
+            return Redirect("http://localhost:5002/");
+        }
+
         /// <summary>
         /// Handle logout page postback
         /// </summary>
@@ -200,7 +200,7 @@ namespace IdentityServer4.Quickstart.UI
             if (User?.Identity.IsAuthenticated == true)
             {
                 // delete local authentication cookie
-                await HttpContext.SignOutAsync();
+                await _signInManager.SignOutAsync();
 
                 // raise the logout event
                 await _events.RaiseAsync(new UserLogoutSuccessEvent(User.GetSubjectId(), User.GetDisplayName()));
@@ -212,7 +212,7 @@ namespace IdentityServer4.Quickstart.UI
                 // build a return URL so the upstream provider will redirect back
                 // to us after the user has logged out. this allows us to then
                 // complete our single sign-out processing.
-                string url = Url.Action("Logout", new { logoutId = vm.LogoutId });
+                string url = Url.Action("Identity/Account/Logout", new { logoutId = vm.LogoutId });
 
                 // this triggers a redirect to the external provider for sign-out
                 return SignOut(new AuthenticationProperties { RedirectUri = url }, vm.ExternalAuthenticationScheme);

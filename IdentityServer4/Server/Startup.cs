@@ -34,11 +34,15 @@ namespace Server {
                 options.UseSqlite("Data Source=C:\\Users\\jason\\IdentityServer4_Test.db"));
 
 
-            services.AddDefaultIdentity<ApplicationUser>()
-                            .AddDefaultUI(UIFramework.Bootstrap4)
-                            .AddEntityFrameworkStores<ApplicationDbContext>();
-                         
-            
+            //services.AddDefaultIdentity<ApplicationUser>()
+            //                .AddDefaultUI(UIFramework.Bootstrap4)
+            //                .AddEntityFrameworkStores<ApplicationDbContext>();
+
+            services.AddIdentity<ApplicationUser, IdentityRole>()
+               .AddEntityFrameworkStores<ApplicationDbContext>()
+               .AddDefaultUI(UIFramework.Bootstrap4)
+               .AddDefaultTokenProviders();
+
 
             var builder = services.AddIdentityServer()
                .AddInMemoryIdentityResources(Config.GetIdentityResources())

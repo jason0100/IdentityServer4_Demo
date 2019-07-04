@@ -11,6 +11,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System.IdentityModel.Tokens.Jwt;
 using Microsoft.AspNetCore.Authentication;
+using IdentityModel.Client;
+using System.Net.Http;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace MVCClient {
     public class Startup {
@@ -24,14 +27,31 @@ namespace MVCClient {
         public void ConfigureServices(IServiceCollection services) {
             services.AddMvc();
 
+
+            services.AddHttpClient();
+
+            services.AddSingleton<IDiscoveryCache>(r => {
+                var factory = r.GetRequiredService<IHttpClientFactory>();
+                return new DiscoveryCache("http://localhost:5000", () => factory.CreateClient());
+            });
+
+            services.AddTransient<CookieEventHandler>();
+            services.AddSingleton<LogoutUserManager>();
+
+
             JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
 
             services.AddAuthentication(options =>
             {
-                options.DefaultScheme = "Cookies";
+                options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
                 options.DefaultChallengeScheme = "oidc";
+
             })
-                .AddCookie("Cookies")
+                .AddCookie(options => {
+                    options.ExpireTimeSpan = TimeSpan.FromMinutes(60);
+                    options.Cookie.Name = "mvchybrid";
+                    options.EventsType = typeof(CookieEventHandler);
+                })
                 .AddOpenIdConnect("oidc", options => {
                     options.Authority = "http://localhost:5000";
                     options.RequireHttpsMetadata = false;
@@ -64,9 +84,9 @@ namespace MVCClient {
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
-
+            app.UseDeveloperExceptionPage();
             app.UseAuthentication();
-
+            app.UseCookiePolicy();
             app.UseStaticFiles();
             app.UseMvcWithDefaultRoute();
         }
